@@ -391,6 +391,7 @@ color: #F5F3FF;
     background: #1d4ed8;
 }
 .delete-btn {
+        display: inline-block;
     margin-top: 15px;
     padding: 9px 15px;
     background: #ef4444;
@@ -403,6 +404,34 @@ color: #F5F3FF;
 .delete-btn:hover {
     background: #dc2626;
 }
+
+.edit-btn {
+        display: inline-block;
+    margin-top: 15px;
+    margin-right: 8px;
+    padding: 9px 15px;
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.edit-btn:hover {
+    background: #7c3aed;
+}
+.item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.item-actions button {
+    margin-top: 15px;
+}
+
 .item-card-header {
     display: flex;
     justify-content: space-between;
@@ -567,7 +596,7 @@ body {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: background 0.3s ease;
 }
 
 .theme-toggle:hover {
@@ -1121,4 +1150,254 @@ body.light-mode footer {
         font-size: 36px;
         line-height: 1.2;
     }
+}
+
+/* Authentication Section */
+.auth-section {
+    padding: 55px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 430px;
+    padding: 32px;
+    border-radius: 18px;
+    background: var(--card-bg, #1c1930);
+    border: 1px solid rgba(160, 120, 255, 0.25);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    background: rgba(140, 100, 255, 0.12);
+    color: inherit;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.auth-tab.active {
+    background: #8055e8;
+    color: white;
+}
+
+.auth-form h2 {
+    margin-bottom: 8px;
+    font-size: 25px;
+}
+
+.auth-form p {
+    margin-bottom: 22px;
+    opacity: 0.7;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 13px 14px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(160, 120, 255, 0.3);
+    border-radius: 9px;
+    background: transparent;
+    color: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.auth-form input:focus {
+    border-color: #9b78ff;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 9px;
+    background: #8055e8;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.auth-form button:hover {
+    background: #7044d5;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 24px 18px;
+    }
+}
+#resendEmailBtn {
+    margin-top: 12px;
+}
+
+/* Navbar Authentication Buttons */
+
+.login-btn,
+.signup-btn,
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #8055e8;
+}
+
+/* Login Button */
+.login-btn {
+    background: transparent;
+    color: #a98aff;
+}
+
+.login-btn:hover {
+    background: rgba(128, 85, 232, 0.15);
+}
+
+/* Sign Up Button */
+.signup-btn {
+    background: #8055e8;
+    color: white;
+}
+
+.signup-btn:hover {
+    background: #7044d5;
+    transform: translateY(-2px);
+}
+
+/* Logout Button */
+.logout-btn {
+    background: #8055e8;
+    color: white;
+}
+
+.logout-btn:hover {
+    background: #7044d5;
+    transform: translateY(-2px);
+}
+
+/* Keep hidden buttons hidden */
+.hidden {
+    display: none !important;
+}
+
+/* Edit Item Modal */
+
+.edit-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.edit-modal.hidden {
+    display: none;
+}
+
+.edit-modal-content {
+    background: #1e1b2e;
+    color: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+}
+
+.edit-modal-content h2 {
+    margin-bottom: 20px;
+    color: #a78bfa;
+}
+
+.edit-modal-content label {
+    display: block;
+    margin: 12px 0 6px;
+}
+
+.edit-modal-content input,
+.edit-modal-content select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #51466d;
+    border-radius: 7px;
+    background: #2d2840;
+    color: white;
+    box-sizing: border-box;
+}
+
+.edit-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.edit-modal-actions button {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: 7px;
+    color: white;
+    cursor: pointer;
+}
+
+.edit-modal-actions button[type="submit"] {
+    background: #8b5cf6;
+}
+
+.edit-modal-actions button[type="button"] {
+    background: #ef4444;
+}
+/* Resolved Item Badge */
+
+.resolved-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: #166534;
+    color: #dcfce7;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+/* Mark as Resolved Button */
+.resolve-btn {
+    margin-top: 15px;
+    padding: 9px 15px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.resolve-btn:hover {
+    background: #15803d;
 }

@@ -22,6 +22,14 @@
         </ul>
 
         <a href="#report" class="nav-button">Report an Item</a>
+
+        <a href="#auth" class="login-btn" id="loginNavBtn">Login</a>
+        <a href="#auth" class="signup-btn" id="signupNavBtn">Sign Up</a>
+
+        <button id="logoutBtn" class="logout-btn hidden" type="button">
+          Logout
+        </button>
+
         <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
       </nav>
     </header>
@@ -44,6 +52,75 @@
             placeholder="Search for lost items..."
           />
           <button type="button" id="searchBtn">Search</button>
+        </div>
+      </section>
+
+      <!-- Authentication Section -->
+      <section class="auth-section" id="auth">
+        <div class="auth-container">
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab active" id="loginTab">
+              Login
+            </button>
+
+            <button type="button" class="auth-tab" id="signupTab">
+              Sign Up
+            </button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="loginForm" class="auth-form">
+            <h2>Welcome Back!</h2>
+            <p>Login to your KampusFind account.</p>
+
+            <input
+              type="email"
+              id="loginEmail"
+              placeholder="Email Address"
+              required
+            />
+
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Password"
+              required
+            />
+
+            <button type="submit">Login</button>
+          </form>
+
+          <!-- Sign Up Form -->
+          <form id="signupForm" class="auth-form hidden">
+            <h2>Create Account</h2>
+            <p>Join the KampusFind community.</p>
+
+            <input
+              type="text"
+              id="signupName"
+              placeholder="Full Name"
+              required
+            />
+
+            <input
+              type="email"
+              id="signupEmail"
+              placeholder="Email Address"
+              required
+            />
+
+            <input
+              type="password"
+              id="signupPassword"
+              placeholder="Password"
+              required
+            />
+
+            <button type="submit">Create Account</button>
+            <button type="button" id="resendEmailBtn">
+              Resend Confirmation Email
+            </button>
+          </form>
         </div>
       </section>
 
@@ -109,11 +186,46 @@
       </section>
     </main>
 
+    <!-- Edit Item Modal -->
+    <div class="edit-modal hidden" id="editModal">
+      <div class="edit-modal-content">
+        <h2>Edit Item</h2>
+
+        <form id="editItemForm">
+          <label for="editItemName">Item Name</label>
+          <input type="text" id="editItemName" required />
+
+          <label for="editItemCategory">Category</label>
+          <select id="editItemCategory" required>
+            <option value="Electronics">Electronics</option>
+            <option value="Stationery">Stationery</option>
+            <option value="Documents">Documents</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <label for="editItemType">Type</label>
+          <select id="editItemType" required>
+            <option value="Lost">Lost</option>
+            <option value="Found">Found</option>
+          </select>
+
+          <label for="editItemLocation">Location</label>
+          <input type="text" id="editItemLocation" required />
+
+          <div class="edit-modal-actions">
+            <button type="submit">Save Changes</button>
+            <button type="button" id="cancelEditBtn">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer id="about">
       <p>© 2026 KampusFind. Built for students, by students.</p>
     </footer>
 
-    <script src="js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
