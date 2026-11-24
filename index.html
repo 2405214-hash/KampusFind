@@ -181,6 +181,22 @@
       </section>
       <section class="items-section" id="lost">
         <h2>Recently Reported Items</h2>
+        <!-- Category Filter -->
+        <select id="categoryFilter">
+          <option value="All">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Stationery">Stationery</option>
+          <option value="Documents">Documents</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Other">Other</option>
+        </select>
+        <!-- Lost / Found Filter -->
+        <select id="typeFilter">
+          <option value="All">All Items</option>
+          <option value="Lost">Lost Items</option>
+          <option value="Found">Found Items</option>
+        </select>
+        <button id="resetFiltersBtn" type="button">Reset Filters</button>
         <div class="items-container" id="itemsContainer"></div>
         <p id="noResults" style="display: none">No items found!</p>
       </section>

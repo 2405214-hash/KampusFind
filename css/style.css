@@ -1401,3 +1401,37 @@ body.light-mode footer {
 .resolve-btn:hover {
     background: #15803d;
 }
+/* Category Filter */
+#categoryFilter,
+#typeFilter {    width: 100%;
+    max-width: 300px;
+    padding: 12px 15px;
+    margin: 20px 0;
+    background: #2d2840;
+    color: white;
+    border: 1px solid #8b5cf6;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#categoryFilter option {
+    background: #1e1b2e;
+    color: white;
+}
+/* Reset Filters Button */
+#resetFiltersBtn {
+    padding: 12px 18px;
+    margin: 10px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#resetFiltersBtn:hover {
+    background: #dc2626;
+}

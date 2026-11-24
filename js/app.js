@@ -175,19 +175,80 @@ async function fetchItems() {
 function searchItems() {
     const searchText = searchInput.value.toLowerCase().trim();
 
-    const filteredItems = items.filter(item =>
-        item.name.toLowerCase().includes(searchText) ||
-        item.category.toLowerCase().includes(searchText) ||
-        item.location.toLowerCase().includes(searchText) ||
-        item.type.toLowerCase().includes(searchText)
-    );
+    const selectedCategory =
+        document.getElementById("categoryFilter").value;
+
+    const selectedType =
+        document.getElementById("typeFilter").value;
+
+    const filteredItems = items.filter(item => {
+
+        const matchesSearch =
+            item.name.toLowerCase().includes(searchText) ||
+            item.category.toLowerCase().includes(searchText) ||
+            item.location.toLowerCase().includes(searchText) ||
+            item.type.toLowerCase().includes(searchText);
+
+        const matchesCategory =
+            selectedCategory === "All" ||
+            item.category === selectedCategory;
+
+        const matchesType =
+            selectedType === "All" ||
+            item.type === selectedType;
+
+        return matchesSearch && matchesCategory && matchesType;
+    });
 
     displayItems(filteredItems);
 }
 
-searchBtn.addEventListener("click", searchItems);
+// Search button click
+searchBtn.addEventListener("click", function() {
+    searchItems();
 
+    document.getElementById("lost").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+
+// Live search while typing (no scrolling)
 searchInput.addEventListener("input", searchItems);
+
+// Search when Enter is pressed
+searchInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+
+        searchItems();
+
+        document.getElementById("lost").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+});
+
+// Category Filter Event
+const categoryFilter = document.getElementById("categoryFilter");
+
+categoryFilter.addEventListener("change", searchItems);
+// Lost / Found Filter Event
+const typeFilter = document.getElementById("typeFilter");
+
+typeFilter.addEventListener("change", searchItems);
+
+// Reset Filters
+const resetFiltersBtn = document.getElementById("resetFiltersBtn");
+
+resetFiltersBtn.addEventListener("click", function() {
+    searchInput.value = "";
+    categoryFilter.value = "All";
+    typeFilter.value = "All";
+
+    searchItems();
+});
 
 displayItems(items);
 const reportForm = document.getElementById("reportForm");
