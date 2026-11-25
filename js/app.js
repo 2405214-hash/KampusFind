@@ -1,10 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const supabaseUrl = "https://bsrqbxdvueockqdxsclj.supabase.co";
-const supabaseKey = "sb_publishable_R2fXXTOAFifZsGOYhczbIw_K57w9170";
-const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseUrl = "https://bsrqbxdvueockqdxsclj.supabase.co";
+    const supabaseKey = "sb_publishable_R2fXXTOAFifZsGOYhczbIw_K57w9170";
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-let items = JSON.parse(localStorage.getItem("kampusItems")) || [
+    let items = JSON.parse(localStorage.getItem("kampusItems")) || [
     {
         name: "Black Water Bottle",
         category: "Accessories",
@@ -37,19 +37,32 @@ const searchBtn = document.getElementById("searchBtn");
 const noResults = document.getElementById("noResults");
 
 let editingItemId = null;
-function displayItems(data) {
+
+async function displayItems(data) {
     itemsContainer.innerHTML = "";
 
     if (data.length === 0) {
+        noResults.textContent = items.length === 0
+            ? "No items reported yet. Be the first to report an item!"
+            : "No items found matching your search.";
+
         noResults.style.display = "block";
         return;
     }
 
     noResults.style.display = "none";
 
-    data.forEach(item => {
-        const card = document.createElement("div");
+    const { data: { user } } = await supabase.auth.getUser();
+    const currentUserId = user?.id;
 
+    data.forEach(item => {
+        console.log("Owner ID match:", {
+            currentUserExists: Boolean(currentUserId),
+            itemUserExists: Boolean(item.user_id),
+            isOwner: currentUserId === item.user_id
+        });
+
+        const card = document.createElement("div");
         card.className = "item-card";
 
         card.innerHTML = `
@@ -62,93 +75,116 @@ function displayItems(data) {
 
             <p>Category: ${item.category}</p>
             <p>Location: ${item.location}</p>
-            ${item.status === "Resolved" 
-    ? '<span class="resolved-badge">RESOLVED</span>' 
-    : ''}
 
-            <div class="item-actions">
-            
-    <button class="delete-btn">Delete Item</button>
-    <button class="edit-btn">Edit Item</button>
-    ${item.status === "Open"
-    ? '<button class="resolve-btn">Mark as Resolved</button>'
-    : ''}
-</div>
+            ${item.status === "Resolved"
+                ? '<span class="resolved-badge">RESOLVED</span>'
+                : ''}
+
+            ${item.user_id === currentUserId ? `
+                <div class="item-actions">
+                    <button class="delete-btn">Delete Item</button>
+                    <button class="edit-btn">Edit Item</button>
+                    ${item.status === "Open"
+                        ? '<button class="resolve-btn">Mark as Resolved</button>'
+                        : ''}
+                </div>
+            ` : ''}
         `;
 
         itemsContainer.appendChild(card);
-        // Mark Item as Resolved
-const resolveBtn = card.querySelector(".resolve-btn");
 
-if (resolveBtn) {
-    resolveBtn.addEventListener("click", async function() {
+        // Mark as Resolved
+        const resolveBtn = card.querySelector(".resolve-btn");
 
-        const confirmResolve = confirm(
-            "Are you sure you want to mark this item as resolved?"
-        );
+        if (resolveBtn) {
+            resolveBtn.addEventListener("click", async function() {
+                const confirmResolve = confirm(
+                    "Are you sure you want to mark this item as resolved?"
+                );
 
-        if (!confirmResolve) {
-            return;
+                if (!confirmResolve) return;
+
+                const { error } = await supabase
+                    .from("items")
+                    .update({ status: "Resolved" })
+                    .eq("id", item.id);
+
+                if (error) {
+                    showNotification(error.message, "error");
+                    return;
+                }
+
+                await fetchItems();
+                showNotification("Item marked as resolved!");
+            });
         }
 
-        const { error } = await supabase
-            .from("items")
-            .update({ status: "Resolved" })
-            .eq("id", item.id);
-
-        if (error) {
-            alert(error.message);
-            return;
-        }
-
-        await fetchItems();
-
-        alert("Item marked as resolved!");
-    });
-}
+        // Edit Item
         const editBtn = card.querySelector(".edit-btn");
 
-editBtn.addEventListener("click", function() {
-    editingItemId = item.id;
-    document.getElementById("editModal").classList.remove("hidden");
+        if (editBtn) {
+            editBtn.addEventListener("click", function() {
+                editingItemId = item.id;
+                document.getElementById("editModal").classList.remove("hidden");
 
-    document.getElementById("editItemName").value = item.name;
-    document.getElementById("editItemCategory").value = item.category;
-    document.getElementById("editItemType").value = item.type;
-    document.getElementById("editItemLocation").value = item.location;
-});
+                document.getElementById("editItemName").value = item.name;
+                document.getElementById("editItemCategory").value = item.category;
+                document.getElementById("editItemType").value = item.type;
+                document.getElementById("editItemLocation").value = item.location;
+            });
+        }
+
+        // Delete Item
         const deleteBtn = card.querySelector(".delete-btn");
 
-        deleteBtn.addEventListener("click", async function() {
-            const confirmDelete = confirm(
-                "Are you sure you want to delete this item?"
-            );
+        if (deleteBtn) {
+            deleteBtn.addEventListener("click", async function() {
+                const confirmDelete = confirm(
+                    "Are you sure you want to delete this item?"
+                );
 
-            if (!confirmDelete) {
-                return;
-            }
+                if (!confirmDelete) return;
 
-            const { error } = await supabase
-                .from("items")
-                .delete()
-                .eq("id", item.id);
+                const { error } = await supabase
+                    .from("items")
+                    .delete()
+                    .eq("id", item.id);
 
-            if (error) {
-                alert(error.message);
-                return;
-            }
+                if (error) {
+                    showNotification(error.message, "error");
+                    return;
+                }
 
-            await fetchItems();
-
-            alert("Item deleted successfully!");
-        });
+                await fetchItems();
+                showNotification("Item deleted successfully!");
+            });
+        }
     });
 }
 
 
+let notificationTimer;
+
+function showNotification(message, type = "success") {
+    const notification = document.getElementById("appNotification");
+
+    notification.textContent = message;
+    notification.className = `app-notification ${type}`;
+    notification.style.display = "block";
+
+    clearTimeout(notificationTimer);
+
+    notificationTimer = setTimeout(() => {
+        notification.style.display = "none";
+    }, 4000);
+}
 
 // Fetch Items from Supabase
 async function fetchItems() {
+    const loadingMessage = document.getElementById("loadingMessage");
+
+    loadingMessage.style.display = "block";
+
     const { data, error } = await supabase
         .from("items")
         .select("*")
@@ -157,19 +193,30 @@ async function fetchItems() {
     if (error) {
         console.error("Error fetching items:", error.message);
         alert("Could not load items from database.");
+
+        loadingMessage.style.display = "none";
         return;
     }
 
     items = data.map(item => ({
-        id: item.id,
-        name: item.title,
-        category: item.category,
-        type: item.item_type,
-        location: item.location,
-        status: item.status
-    }));
+    id: item.id,
+    user_id: item.user_id,
+    name: item.title,
+    category: item.category,
+    type: item.item_type,
+    location: item.location,
+    status: item.status
+}));
+console.log("Logged-in account:", (await supabase.auth.getUser()).data.user?.email);
+
+console.log("Item ownership:", data.map(item => ({
+    name: item.title,
+    user_id: item.user_id
+})));
 
     displayItems(items);
+
+    loadingMessage.style.display = "none";
 }
 
 function searchItems() {
@@ -250,7 +297,6 @@ resetFiltersBtn.addEventListener("click", function() {
     searchItems();
 });
 
-displayItems(items);
 const reportForm = document.getElementById("reportForm");
 
 
@@ -291,15 +337,15 @@ reportForm.addEventListener("submit", async function(event) {
         });
 
     if (error) {
-        alert(error.message);
-        return;
-    }
+    showNotification(error.message, "error");
+    return;
+}
 
     await fetchItems();
 
     reportForm.reset();
 
-    alert("Item reported successfully!");
+    showNotification("Item reported successfully!");
 });
 
 // DARK / LIGHT MODE TOGGLE
@@ -338,6 +384,15 @@ authSignupTab.addEventListener("click", () => {
     authSignupTab.classList.add("active");
     authLoginTab.classList.remove("active");
 });
+// Navbar Login Button
+document.getElementById("loginNavBtn").addEventListener("click", () => {
+    authLoginTab.click();
+});
+
+// Navbar Sign Up Button
+document.getElementById("signupNavBtn").addEventListener("click", () => {
+    authSignupTab.click();
+});
 
 // Sign Up with Supabase
 authSignupForm.addEventListener("submit", async (event) => {
@@ -359,11 +414,11 @@ authSignupForm.addEventListener("submit", async (event) => {
     });
 
     if (error) {
-        alert(error.message);
-        return;
-    }
+    showNotification(error.message, "error");
+    return;
+}
 
-    alert("Account created! Please check your email and confirm your account before logging in.");
+    showNotification("Account created! Please check your email and confirm your account before logging in.");
 
     authSignupForm.reset();
 });
@@ -411,11 +466,11 @@ authLoginForm.addEventListener("submit", async (event) => {
     });
 
     if (error) {
-        alert(error.message);
-        return;
-    }
+    showNotification(error.message, "error");
+    return;
+}
 
-    alert("Login successful! Welcome to KampusFind.");
+    showNotification("Login successful! Welcome to KampusFind.");
 
     authLoginForm.reset();
 });
@@ -446,7 +501,7 @@ logoutBtn.addEventListener("click", async () => {
         return;
     }
 
-    alert("You have been logged out.");
+    showNotification("You have been logged out!");
 });
 
 // Migrate old LocalStorage items to Supabase
@@ -534,7 +589,7 @@ editItemForm.addEventListener("submit", async function(event) {
     };
 
     if (!updatedItem.title || !updatedItem.location) {
-        alert("Please fill all the fields!");
+        showNotification("Please fill all the fields!", "error");
         return;
     }
 
@@ -544,7 +599,7 @@ editItemForm.addEventListener("submit", async function(event) {
         .eq("id", editingItemId);
 
     if (error) {
-        alert(error.message);
+        showNotification(error.message, "error");
         return;
     }
 
@@ -552,5 +607,45 @@ editItemForm.addEventListener("submit", async function(event) {
 
     await fetchItems();
 
-    alert("Item updated successfully!");
+    showNotification("Item updated successfully!");
+});
+// Toggle Password Visibility
+const togglePasswordButtons = document.querySelectorAll(".toggle-password");
+
+togglePasswordButtons.forEach(button => {
+    button.addEventListener("click", function() {
+        const targetId = this.dataset.target;
+        const passwordInput = document.getElementById(targetId);
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            this.textContent = "🙈";
+        } else {
+            passwordInput.type = "password";
+            this.textContent = "👁️";
+        }
+    });
+});
+// Forgot Password
+const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+
+forgotPasswordLink.addEventListener("click", async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim();
+
+    if (!email) {
+        alert("Please enter your registered email address first.");
+        return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password.html`
+    });
+
+    if (error) {
+        alert(error.message);
+    } else {
+        alert("Password reset email sent! Please check your inbox.");
+    }
 });

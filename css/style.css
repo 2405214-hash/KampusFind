@@ -376,6 +376,12 @@ color: #F5F3FF;
     font-size: 15px;
     background: white;
 }
+#reportForm input:focus,
+#reportForm select:focus {
+    outline: none;
+    border: 1px solid #A855F7;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+}
 
 #reportForm button {
     padding: 14px;
@@ -385,6 +391,7 @@ color: #F5F3FF;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 #reportForm button:hover {
@@ -1111,8 +1118,9 @@ body.light-mode .theme-toggle {
 }
 
 #reportForm button:hover {
-    background: linear-gradient(135deg, #6D28D9, #9333EA);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #5B21B6, #7E22CE);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(147, 51, 234, 0.4);
 }
 
 /* Footer - Purple Theme */
@@ -1395,7 +1403,8 @@ body.light-mode footer {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease;
+   /* Fix Password Eye Button */
+ transition: background 0.3s ease;
 }
 
 .resolve-btn:hover {
@@ -1434,4 +1443,273 @@ body.light-mode footer {
 
 #resetFiltersBtn:hover {
     background: #dc2626;
+}
+/* Password Eye Toggle */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 50px;
+    display: block;
+}
+
+.password-wrapper .toggle-password {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    right: 12px !important;
+
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+
+    margin: auto 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+}
+/* Forgot Password Link */
+#forgotPasswordLink {
+    display: block;
+    width: fit-content;
+    margin: 12px 0 18px auto;
+
+    color: #b99aff;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+
+    transition: color 0.3s ease;
+}
+
+#forgotPasswordLink:hover {
+    color: #d5c2ff;
+    text-decoration: underline;
+}
+
+/* Reset Password Page */
+
+.reset-password-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+}
+
+.reset-password-card {
+    width: 100%;
+    max-width: 520px;
+    padding: 40px;
+    background: #1c1930;
+    border: 1px solid #49366f;
+    border-radius: 22px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+.reset-icon {
+    font-size: 42px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.reset-password-card h1 {
+    color: #f5f1ff;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.reset-subtitle {
+    color: #aaa4bb;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.reset-input-group {
+    margin-bottom: 22px;
+}
+
+.reset-input-group label {
+    display: block;
+    color: #e5ddf7;
+    margin-bottom: 9px;
+    font-weight: 500;
+}
+
+.reset-input-group input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 16px;
+    background: #211d36;
+    border: 1px solid #514078;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+.reset-input-group input:focus {
+    border-color: #8956ed;
+    box-shadow: 0 0 0 3px rgba(137, 86, 237, 0.15);
+}
+
+.reset-submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: #8050e8;
+    color: white;
+    border: none;
+    border-radius: 11px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.reset-submit-btn:hover {
+    background: #9569f3;
+    transform: translateY(-2px);
+}
+
+.reset-message {
+    color: #cbb7ff;
+    text-align: center;
+    margin-top: 18px;
+}
+
+@media (max-width: 550px) {
+    .reset-password-card {
+        padding: 28px 20px;
+    }
+
+    .reset-password-card h1 {
+        font-size: 25px;
+    }
+}
+/* Light Mode - Authentication Section */
+
+body.light-mode .auth-container {
+    background: #FFFFFF;
+    color: #241633;
+    border: 1px solid #DDD0F5;
+    box-shadow: 0 10px 35px rgba(109, 40, 217, 0.12);
+}
+
+/* Login and Sign Up Headings */
+body.light-mode .auth-form h2 {
+    color: #4C1D95;
+}
+
+body.light-mode .auth-form p {
+    color: #6B5B7A;
+}
+
+/* Authentication Inputs */
+body.light-mode .auth-form input {
+    background: #FAF8FF;
+    color: #241633;
+    border: 1px solid #C4B5FD;
+}
+
+body.light-mode .auth-form input::placeholder {
+    color: #9686A8;
+}
+
+/* Login and Sign Up Tabs */
+body.light-mode .auth-tab {
+    background: #F0E7FF;
+    color: #5B21B6;
+}
+
+body.light-mode .auth-tab.active {
+    background: #8050E8;
+    color: #FFFFFF;
+}
+
+/* Forgot Password */
+body.light-mode #forgotPasswordLink {
+    color: #7C3AED;
+}
+
+body.light-mode #forgotPasswordLink:hover {
+    color: #5B21B6;
+}
+/* Light Mode - Recently Reported Filters */
+
+body.light-mode #categoryFilter,
+body.light-mode #typeFilter {
+    background: #FFFFFF;
+    color: #4C1D95;
+    border: 1px solid #C4B5FD;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.08);
+}
+
+/* Dropdown Options */
+body.light-mode #categoryFilter option,
+body.light-mode #typeFilter option {
+    background: #FFFFFF;
+    color: #4C1D95;
+}
+
+/* Dropdown Focus */
+body.light-mode #categoryFilter:focus,
+body.light-mode #typeFilter:focus {
+    outline: none;
+    border-color: #8050E8;
+    box-shadow: 0 0 0 3px rgba(128, 80, 232, 0.15);
+}
+
+/* Reset Filters Button */
+body.light-mode #resetFiltersBtn {
+    background: #EF4444;
+    color: #FFFFFF;
+    border: none;
+}
+/* App Notification */
+.app-notification {
+    display: none;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+body.light-mode .app-notification {
+    background: #ecfdf5;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+/* Error Notification */
+.app-notification.error {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+body.light-mode .app-notification.error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
 }
