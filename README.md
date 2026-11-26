@@ -46,7 +46,7 @@ KampusFind provides a centralized platform where students can report lost and fo
 
 1. Clone this repository:
 
-   git clone : https://github.com/2405214-hash/KampusFind.git
+   git clone https://github.com/2405214-hash/KampusFind.git
 
 2. Open the project folder in VS Code.
 
@@ -90,7 +90,9 @@ KampusFind/
 
 **Core Features Implemented** ✅
 
-The project is currently in its final testing and documentation stage.
+**Core Features Implemented** ✅
+
+The project has completed its core development, testing, and deployment.
 
 ## 👨‍💻 Author
 
