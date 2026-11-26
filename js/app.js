@@ -38,10 +38,13 @@ const noResults = document.getElementById("noResults");
 
 let editingItemId = null;
 
-async function displayItems(data) {
-    itemsContainer.innerHTML = "";
+let displayRequestId = 0;
 
+async function displayItems(data) {
+    const requestId = ++displayRequestId;
+    
     if (data.length === 0) {
+        itemsContainer.innerHTML = "";
         noResults.textContent = items.length === 0
             ? "No items reported yet. Be the first to report an item!"
             : "No items found matching your search.";
@@ -52,16 +55,16 @@ async function displayItems(data) {
 
     noResults.style.display = "none";
 
-    const { data: { user } } = await supabase.auth.getUser();
-    const currentUserId = user?.id;
+const { data: { user } } = await supabase.auth.getUser();
+
+if (requestId !== displayRequestId) return;
+
+const currentUserId = user?.id;
+
+itemsContainer.innerHTML = "";
 
     data.forEach(item => {
-        console.log("Owner ID match:", {
-            currentUserExists: Boolean(currentUserId),
-            itemUserExists: Boolean(item.user_id),
-            isOwner: currentUserId === item.user_id
-        });
-
+ 
         const card = document.createElement("div");
         card.className = "item-card";
 
@@ -207,12 +210,6 @@ async function fetchItems() {
     location: item.location,
     status: item.status
 }));
-console.log("Logged-in account:", (await supabase.auth.getUser()).data.user?.email);
-
-console.log("Item ownership:", data.map(item => ({
-    name: item.title,
-    user_id: item.user_id
-})));
 
     displayItems(items);
 
